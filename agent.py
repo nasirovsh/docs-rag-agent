@@ -1,14 +1,15 @@
 import requests
 import uuid
 
-from deepagents import StateBackend, create_deep_agent
+from deepagents import create_deep_agent
+from deepagents.backends import StateBackend
 from langchain.chat_models import init_chat_model
+from langchain.messages import HumanMessage
 from langchain.tools import tool
 from langchain_core.documents import Document
 from langchain_core.vectorstores import InMemoryVectorStore
-from langchain_openai import OpenAIEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from dotenv import load_dotenv
 
