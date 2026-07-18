@@ -1,7 +1,8 @@
 import requests
 import uuid
 
-from deepagents import StateBackend
+from deepagents import StateBackend, create_deep_agent
+from langchain.chat_models import init_chat_model
 from langchain.tools import tool
 from langchain_core.documents import Document
 from langchain_core.vectorstores import InMemoryVectorStore
@@ -148,3 +149,36 @@ Your role is to coordinate chunk analysis by delegating to the chunk-analyst sub
 - Wait for all chunk-analyst results before writing the final answer.
 - Merge overlapping facts and deduplicate source URLs.
 - Prefer concrete steps and code-oriented guidance from the documentation."""
+
+
+max_concurrent_analysts = 3
+
+INSTRUCTIONS = (
+    RAG_WORKFLOW_INSTRUCTIONS
+    + "\n\n"
+    + "=" * 80
+    + "\n\n"
+    + SUBAGENT_DELEGATION_INSTRUCTIONS.format(
+        max_concurrent_analysts=max_concurrent_analysts,
+    )
+)
+
+chunk_analyst_subagent = {
+    "name": "chunk-analyst",
+    "description": (
+        "Analyze one retrieved documentation chunk file. "
+        "Pass the user question and a single file path under /retrieved/."
+    ),
+    "system_prompt": CHUNK_ANALYST_INSTRUCTIONS,
+}
+
+model = init_chat_model(model="google_genai:gemini-3.5-flash")
+
+agent = create_deep_agent(
+    name="docs-rag-agent",
+    model=model,
+    tools=[search_documentation],
+    instructions=INSTRUCTIONS,
+    backend=backend,
+    subagents=[chunk_analyst_subagent],
+)
