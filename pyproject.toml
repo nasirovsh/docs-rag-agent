@@ -12,4 +12,6 @@ dependencies = [
     "numpy>=2.5.1",
     "requests>=2.34.2",
     "dotenv>=0.9.9",
+    "langchain-community>=0.4.2",
+    "langchain-ollama>=1.1.0",
 ]

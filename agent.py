@@ -8,7 +8,7 @@ from langchain.messages import HumanMessage
 from langchain.tools import tool
 from langchain_core.documents import Document
 from langchain_core.vectorstores import InMemoryVectorStore
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from dotenv import load_dotenv
@@ -66,8 +66,8 @@ print(f"Split into {len(docs_chunks)} chunks.")
 
 
 #  Create embeddings and store in a vector store
-#  1.Google Gemini embeddings
-embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+#  Local Ollama embeddings (runs on your machine, no API rate limits)
+embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
 #  Store/index embeddings and chunks in an in-memory vector store
 # vector_store = InMemoryVectorStore.from_documents(docs_chunks, embeddings)
