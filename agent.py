@@ -10,7 +10,9 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
+from dotenv import load_dotenv
 
+load_dotenv()
 
 DOCS_BASE = "https://docs.langchain.com"
 
@@ -182,3 +184,20 @@ agent = create_deep_agent(
     backend=backend,
     subagents=[chunk_analyst_subagent],
 )
+
+
+##############################################################
+#  Run agent
+
+from langchain.messages import HumanMessage
+
+EXAMPLE_QUERY = "How do I stream intermediate tool results from a subagent?"
+
+if __name__ == "__main__":
+    result = agent.invoke(
+        {"messages": [HumanMessage(content=EXAMPLE_QUERY)]}
+    )
+
+    for msg in result.get("messages", []):
+        if msg.text:
+            print(msg.text)
