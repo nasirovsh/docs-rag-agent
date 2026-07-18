@@ -181,7 +181,7 @@ agent = create_deep_agent(
     name="docs-rag-agent",
     model=model,
     tools=[search_documentation],
-    instructions=INSTRUCTIONS,
+    system_prompt=INSTRUCTIONS,
     backend=backend,
     subagents=[chunk_analyst_subagent],
 )
